@@ -1,7 +1,7 @@
 # Sistema Help Desk
 
 
-![image.png](assets/image.png?t=1661559066227)
+![image](https://user-images.githubusercontent.com/52088444/187006050-a16ba0bf-cab3-4c28-9187-5da0f072695e.png)
 
 
 ## Iniciaremos o desenvolvimento pelos os Enums
@@ -24,7 +24,7 @@
 System.out.println(t.getDescricao());
 }
 
-![image.png](assets/image.png?t=1661558257612)
+![image](https://user-images.githubusercontent.com/52088444/187006036-395f36b6-6519-42ec-af00-616399fa1bf0.png)
 
 
 
