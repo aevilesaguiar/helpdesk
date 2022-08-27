@@ -1,8 +1,6 @@
 # Sistema Help Desk
 
-
 ![image](https://user-images.githubusercontent.com/52088444/187006050-a16ba0bf-cab3-4c28-9187-5da0f072695e.png)
-
 
 ## Iniciaremos o desenvolvimento pelos os Enums
 
@@ -27,10 +25,22 @@ System.out.println(t.getDescricao());
 ![image](https://user-images.githubusercontent.com/52088444/187006036-395f36b6-6519-42ec-af00-616399fa1bf0.png)
 
 
+## Criação da classe Pessoa
+
+
+
+A classe Pessoa é herdada pela classe Cliente e Tecnico. A classe Pessao será abstrata , não poderemos criar instancia de Pessoa e sim de Tecnico e Cliente( verificar UML no inicio do projeto), não teremos objetos de Pessoa. Quando quisermos criar um usuario ele será um cliente ou um técnico.
+
+```
+public abstract class Pessoa {
+}
+
+```
+
+Os atributos da classe Pessoa não podem ser private , eleas deverão ser protected, quando os atributos forem privates isso significa que só a classe Pessoa terá acesso aos atributos, por isso utilizaremos protected, protected todas as classes filhas de Pessoa como tecnico e Cliente terão acesso.
 
 
 
 ## Referencias
-
 
 - https://www.devmedia.com.br/enums-no-java/38764
