@@ -1,20 +1,33 @@
 package com.aeviles.helpdesk.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public abstract class Pessoa {
+@Entity
+public abstract class Pessoa implements Serializable {
 
 
+    private static final long serialVersionUID = -1813588164058069631L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)//responsabilidade do banco de dados de criar
     protected Integer id;
     protected String nome;
+    @Column(unique = true)//estou informando ao BD que esse valor é unico
     protected String cpf;
+    @Column(unique = true)//estou informando ao BD que esse valor é unico
     protected String email;
     protected String senha;
+    @ElementCollection(fetch = FetchType.EAGER)//Essa é uma coleção de elementos do tipo Integer , e quando eu der um get nesse usuario, buscar essa listinha no banco essa lista de perfil tem que vir com o ususario, devido ao front end que terá uma rota
+    @CollectionTable(name = "PERFIS")//criar uma coleção de tabelas, ou seja no nosso banco haverá uma tabela apenas com os perfis
     protected Set<Integer> perfis= new HashSet<>();//evita a exceção de nullPointerException, o set não permite que existe dois perfis igual pois é um conjunto, eu quero armazenar apenas o código do perfil
+    @JsonFormat(pattern = "dd/MM/yyyy")//formato/padrão pois apenas com LocalDate vem sem a forma padrao que eu quero
     protected LocalDate dataCriacao=LocalDate.now();//esse método pega a instancia atual em que esse método foi criado
 
     public Pessoa() {

@@ -1,19 +1,36 @@
 package com.aeviles.helpdesk.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Chamado {
+@Entity
+public class Chamado implements Serializable {
 
+    private static final long serialVersionUID = -3260603479817898134L;
+
+    @Id //chave primaria
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //essa é a forma de geração da chave primária não será minha responsabilidade e sim  o banco
     private Integer id;
+
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataAbertura= LocalDate.now();
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataFechamento;
     private Prioridade prioridade;
     private Status status;
     private String titulo;
     private String Observacoes;
 
+    @ManyToOne //muitos chamados para um técnico
+    @JoinColumn(name = "tecnico_id")
     private Tecnico tecnico;
+
+    @ManyToOne//muitos chamados para um cliente
+    @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
     public Chamado() {

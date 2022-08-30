@@ -39,6 +39,10 @@ public abstract class Pessoa {
 
 Os atributos da classe Pessoa não podem ser private , eleas deverão ser protected, quando os atributos forem privates isso significa que só a classe Pessoa terá acesso aos atributos, por isso utilizaremos protected, protected todas as classes filhas de Pessoa como tecnico e Cliente terão acesso.
 
+## Implements "Serializable"
+
+Serializable Serve para seja criado uma sequencia de bytes das instancias da nossa classe para que possam ser trafegados em rede,
+podem ser armazenados em arquivos de memória, pode ser descerealizados e recuperadas em memória posteriormente
 
 
 ## Referencias
