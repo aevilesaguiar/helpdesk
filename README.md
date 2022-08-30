@@ -44,7 +44,21 @@ Os atributos da classe Pessoa não podem ser private , eleas deverão ser protec
 Serializable Serve para seja criado uma sequencia de bytes das instancias da nossa classe para que possam ser trafegados em rede,
 podem ser armazenados em arquivos de memória, pode ser descerealizados e recuperadas em memória posteriormente
 
+## Padrão de camadas
+
+![](.README_images/0112c4bc.png)
+
+Nós temos a nossa aplicação cliente que fará uma requisição ao back end. A camada do backEnd  que vai receber o primeiro 
+contato da nossa aplicação cliente é a camada de controladores/camada REST/resources ela se comunica com a camada de serviços que é onde fica 
+implementado as nossas lógicas de negócios, que tem contato com a camada de acesso a dados que são os repositorys, 
+e os repositorys vão servir para fazer a persistencia das informações no nosso banco. 
+
+
+## implements CommandLineRunner
+
+O CommandLineRunner ele tem um método run, e ele roda toda vez que eu startar a aplicação.
 
 ## Referencias
 
 - https://www.devmedia.com.br/enums-no-java/38764
+- https://wpsilva.medium.com/utilizando-banco-de-dados-h2-com-spring-de-forma-r%C3%A1pida-e-simples-6d896e15a4af
