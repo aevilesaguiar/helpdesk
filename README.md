@@ -205,9 +205,64 @@ Controller: Ele é utilizado para lidar com a ligação da View com as outras pa
 
 @JsonIgnore é usado no nível do campo para marcar uma propriedade ou lista de propriedades a serem ignoradas.
 
+## coletar e converter um fluxo em um conjunto - usando a API de fluxos do Java 8, com a Collectorsclasse.
+
+Uma stream representa uma sequência de elementos e suporta diferentes tipos de operações que levam ao resultado desejado.
+A origem de uma stream geralmente é uma Collection ou um array,  a partir do qual os dados são transmitidos.
+
+Os streams diferem das  collections de várias maneiras; mais notavelmente porque os fluxos não são uma estrutura de 
+dados que armazena elementos. Eles são funcionais por natureza e vale a pena observar que as operações em um fluxo 
+produzem um resultado e normalmente retornam outro fluxo, mas não modificam sua origem.
+Para "solidificar" as alterações, você coleta os elementos de um fluxo de volta em um arquivo Collection.
+
+## Collectors e Stream.collect()
+
+Os coletores representam implementações da Collectorinterface, que implementa várias operações de redução úteis, 
+como acumular elementos em coleções, resumir elementos com base em um parâmetro específico etc.
+
+Todas as implementações predefinidas podem ser encontradas dentro da Collectorsclasse.
+
+Você também pode facilmente implementar seu próprio collector e usá-lo em vez dos predefinidos - você pode ir muito longe 
+com os collectors internos, pois eles cobrem a grande maioria dos casos em que você pode querer usá-los.
+
+Para poder usar a classe em nosso código, precisamos importá-la:
+
+
+## Guia para Collectors.toSet()
+
+O toSet()método é usado para coletar um fluxo em um conjunto. Ele funciona de maneira semelhante ao toList()método, mas,
+em última análise, coleta em uma estrutura de dados subjacente diferente, retornando um Collectorque acumula os elementos 
+de entrada em um novo arquivo Set.
+
+Vale a pena notar que não há garantias sobre o tipo, mutabilidade, serialização ou segurança de thread do Setretornado:
+
+public static <T> Collector<T,?,Set<T>> toSet()
+
+A Setnão permite elementos duplicados ou em termos mais formais - conjuntos não contêm nenhum par de elementos a e b tal 
+que a.equals(b), e pode conter no máximo um null elemento.
+
+Se você coletar um fluxo com elementos duplicados em um Set- é uma maneira rápida de remover duplicatas:
+
+Stream<String> stream =
+Stream.of("This", "forms", "forms", "a", "short", "a", "sentence", "sentence");
+Set<String> sentenceSet = stream.collect(Collectors.toSet());
+
+
+No entanto, este exemplo destaca uma característica importante de como os conjuntos são preenchidos - os elementos não 
+mantêm sua ordem relativa quando coletados, como fazem, digamos, no toList()coletor. Isso ocorre porque a implementação 
+padrão de a Seté a HashSet, que ordena os elementos com base em seus hashes e nem garante a consistência dessa ordem ao 
+longo do tempo.
+
+A execução deste trecho de código resulta em:
+
+[sentence, a, This, short, forms]
+
 
 ## Referencias
 
 - https://www.devmedia.com.br/enums-no-java/38764
 - https://wpsilva.medium.com/utilizando-banco-de-dados-h2-com-spring-de-forma-r%C3%A1pida-e-simples-6d896e15a4af
 - https://www.baeldung.com/spring-response-entity
+- https://stackabuse.com/guide-to-java-8-collectors-toset/
+- https://www.tutorialspoint.com/jackson_annotations/jackson_annotations_jsonignore.htm
+- 

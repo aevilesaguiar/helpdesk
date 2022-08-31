@@ -1,6 +1,7 @@
 package com.aeviles.helpdesk.controller;
 
 import com.aeviles.helpdesk.domain.Tecnico;
+import com.aeviles.helpdesk.domain.dtos.TecnicoDTO;
 import com.aeviles.helpdesk.service.TecnicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +21,10 @@ public class TecnicoController {
     //ResponseEntity significa que vamos representar toda resposta http, usamos responseEntity para trabalghar com APIS
     //localhost:8080/tecnicos/1
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Tecnico> findById(@PathVariable Integer id){//como estamos recebendo uma variavel de path temos que colocar um @PathVariable
+    public ResponseEntity<TecnicoDTO> findById(@PathVariable Integer id){//como estamos recebendo uma variavel de path temos que colocar um @PathVariable
 
         Tecnico objTecnico= this.tecnicoService.findById(id);
-        return ResponseEntity.ok().body(objTecnico);
+        return ResponseEntity.ok().body(new TecnicoDTO(objTecnico));
 
     }
 
