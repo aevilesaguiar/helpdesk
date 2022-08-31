@@ -93,8 +93,121 @@ public class HelpdeskApplication implements CommandLineRunner {
 	}
 }
 
+## Usando Spring ResponseEntity para manipular a resposta HTTP
+
+ResponseEntity representa toda a resposta HTTP: código de status, cabeçalhos e corpo . Como resultado, podemos usá-lo para configurar totalmente a resposta HTTP.
+
+Se quisermos usá-lo, temos que devolvê-lo do endpoint;
+
+ResponseEntity é um tipo genérico. Consequentemente, podemos usar qualquer tipo como o corpo da resposta.
+Como especificamos o status da resposta programaticamente, podemos retornar com códigos de status diferentes para diferentes cenários.
+Além disso, podemos definir cabeçalhos HTTP
+
+Além disso, ResponseEntity fornece duas interfaces de construtor aninhadas : HeadersBuilder e sua subinterface, BodyBuilder . Portanto, podemos acessar seus recursos por meio dos métodos estáticos de ResponseEntity .
+
+O caso mais simples é uma resposta com um corpo e um código de resposta HTTP 200.
+
+Para os códigos de status HTTP mais populares , obtemos métodos estáticos:
+Ao retornar o objeto ResponseEntity<T> do controlador, podemos obter uma exceção ou erro ao processar a solicitação e gostaríamos de retornar informações relacionadas ao erro para o usuário representado como algum outro tipo, digamos E .
+
+O Spring 3.2 traz suporte para um  @ExceptionHandler  global com a nova  anotação @ControllerAdvice, que  lida com esses tipos de cenários. Para obter detalhes aprofundados, consulte nosso artigo existente aqui .
+
+Embora ResponseEntity seja muito poderoso, não devemos usá-lo em demasia. Em casos simples, existem outras opções que atendem às nossas necessidades e resultam em um código muito mais limpo.
+
+## Alternativas
+
+@ResponseBody
+Em aplicativos Spring MVC clássicos, os endpoints geralmente retornam páginas HTML renderizadas. Às vezes, precisamos apenas retornar os dados reais; por exemplo, quando usamos o endpoint com AJAX.
+
+Nesses casos, podemos marcar o método do manipulador de solicitação com @ResponseBody e o Spring trata o valor do resultado do método como o próprio corpo da resposta HTTP .
+
+Para obter mais informações, este artigo é um bom ponto de partida .
+
+@ResponseStatus
+Quando um endpoint retorna com sucesso, o Spring fornece uma resposta HTTP 200 (OK). Se o endpoint lançar uma exceção, o Spring procurará um manipulador de exceção que informe qual status HTTP usar.
+
+Podemos marcar esses métodos com @ResponseStatus e, portanto, o Spring retorna com um status HTTP personalizado .
+
+Manipule a resposta diretamente
+O Spring também nos permite acessar o objeto javax.servlet.http.HttpServletResponse diretamente; temos apenas que declará-lo como um argumento de método:
+
+@GetMapping("/manual")
+void manual(HttpServletResponse response) throws IOException {
+response.setHeader("Custom-Header", "foo");
+response.setStatus(200);
+response.getWriter().println("Hello World!");
+}
+Como o Spring fornece abstrações e recursos adicionais acima da implementação subjacente, não devemos manipular a resposta dessa maneira .
+
+
+De acordo com a documentação oficial: Criando controladores REST com a anotação @RestController
+
+@RestController é uma anotação de estereótipo que combina @ResponseBody e @Controller. Mais do que isso, dá mais significado ao seu Controller e também pode trazer semânticas adicionais em futuras versões do framework.
+
+Parece que é melhor usar @RestControllerpara maior clareza, mas você também pode combiná -lo com ResponseEntityflexibilidade quando necessário ( de acordo com o tutorial oficial e o código aqui e minha pergunta para confirmar isso ).
+
+Por exemplo:
+
+@RestController
+public class MyController {
+
+    @GetMapping(path = "/test")
+    @ResponseStatus(HttpStatus.OK)
+    public User test() {
+        User user = new User();
+        user.setName("Name 1");
+
+        return user;
+    }
+
+}
+é o mesmo que:
+
+@RestController
+public class MyController {
+
+    @GetMapping(path = "/test")
+    public ResponseEntity<User> test() {
+        User user = new User();
+        user.setName("Name 1");
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        // ...
+        return new ResponseEntity<>(user, responseHeaders, HttpStatus.OK);
+    }
+
+}
+Dessa forma, você pode definir ResponseEntityapenas quando necessário.
+
+Atualizar
+
+Você pode usar isso:
+
+    return ResponseEntity.ok().headers(responseHeaders).body(user);
+
+## entendendo
+
+Como já dito, JPA é somente a tecnologia de acesso ao banco de dados. Com ele você pode usar os Design Patterns 
+(padrão de design) que não fazem parte do JPA especificamente.
+
+
+Repository: é um Design Pattern onde os dados são obtidos do banco de dados e ocorre também a regra de negócio. 
+Este retorna objetos de domínio que seriam as Entidades (classes anotadas com @Entity).
+
+DAO: é outro Design Pattern onde somente há a comunicação com o banco de dados sem regra de negócio.
+
+Service: seria outro Desing Pattern onde há somente a regra de negócio e não tem acesso direto ao banco de dados.
+
+Controller: Ele é utilizado para lidar com a ligação da View com as outras partes do sistema que são a regra de negócio e banco de dados.
+
+
+## Observações
+
+@JsonIgnore é usado no nível do campo para marcar uma propriedade ou lista de propriedades a serem ignoradas.
+
 
 ## Referencias
 
 - https://www.devmedia.com.br/enums-no-java/38764
 - https://wpsilva.medium.com/utilizando-banco-de-dados-h2-com-spring-de-forma-r%C3%A1pida-e-simples-6d896e15a4af
+- https://www.baeldung.com/spring-response-entity

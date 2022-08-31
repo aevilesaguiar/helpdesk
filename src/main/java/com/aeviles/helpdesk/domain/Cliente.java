@@ -1,5 +1,7 @@
 package com.aeviles.helpdesk.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -11,6 +13,7 @@ public class Cliente extends Pessoa{
 
     private static final long serialVersionUID = -1813588164058069631L;
 
+    @JsonIgnore //protege contra a serialização
     @OneToMany(mappedBy = "cliente")
     private List<Chamado> chamados= new ArrayList<>();//foiiniciliado para evitar nullPointer Exception
 

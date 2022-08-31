@@ -1,5 +1,7 @@
 package com.aeviles.helpdesk.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -12,6 +14,7 @@ public class Tecnico extends Pessoa{
 
     private static final long serialVersionUID = -1813588164058069631L;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "tecnico")//um técnico para muitos chamados
     private List<Chamado> chamados= new ArrayList<>();
 
