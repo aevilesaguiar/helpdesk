@@ -1,6 +1,7 @@
 package com.aeviles.helpdesk.service;
 
 import com.aeviles.helpdesk.domain.Tecnico;
+import com.aeviles.helpdesk.domain.dtos.TecnicoDTO;
 import com.aeviles.helpdesk.repository.TecnicoRepository;
 import com.aeviles.helpdesk.service.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +24,12 @@ public class TecnicoService {
     public List<Tecnico> findAll() {
 
         return tecnicoRepository.findAll();
+    }
+
+    public Tecnico create(TecnicoDTO tecnicoDTO) {
+        tecnicoDTO.setId(null);//para aassegurar que o id vai vir nulo
+
+        Tecnico newTecnicoObj=new Tecnico(tecnicoDTO);
+        return tecnicoRepository.save(newTecnicoObj);
     }
 }
