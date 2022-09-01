@@ -18,6 +18,11 @@ public class Cliente extends Pessoa{
     @OneToMany(mappedBy = "cliente")
     private List<Chamado> chamados= new ArrayList<>();//foiiniciliado para evitar nullPointer Exception
 
+    public Cliente() {
+    super();
+        addPerfil(Perfil.CLIENTE);
+    }
+
     public Cliente(ClienteDTO clienteDTO) {
         super();
         this.id = clienteDTO.getId();
