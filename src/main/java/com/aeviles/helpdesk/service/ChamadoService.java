@@ -7,6 +7,8 @@ import com.aeviles.helpdesk.service.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +41,16 @@ public class ChamadoService {
         return  chamadoRepository.save(newChamado(objChamadoDTO));
     }
 
+    public Chamado update(Integer id, ChamadoDTO objDTO) {
+
+        objDTO.setId(id);//assegurar que o objDTO vai ter o Id que ele passou na url
+        Chamado oldObj=findById(id);//caso não exista lança uma exceção personalizada
+
+        oldObj=newChamado(objDTO);//newChamado atualiza
+
+        return chamadoRepository.save(oldObj);
+    }
+
     private Chamado newChamado(ChamadoDTO objDTO){
         //caso não existe tecnico/cliente que foi passada como parâmetro uma exceção vai ser lançada
         Tecnico tecnico=tecnicoService.findById(objDTO.getTecnico());
@@ -51,6 +63,11 @@ public class ChamadoService {
             chamado.setId(objDTO.getId());
         }
 
+        //se o status for o 2 fechar o chamado com a data atual
+        if(objDTO.getStatus().equals(2)){
+            chamado.setDataFechamento(LocalDate.now());
+        }
+
         chamado.setTecnico(tecnico);
         chamado.setCliente(cliente);
         chamado.setPrioridade(Prioridade.toEnum(objDTO.getPrioridade()));
@@ -61,6 +78,7 @@ public class ChamadoService {
 
 
     }
+
 
 
 }
