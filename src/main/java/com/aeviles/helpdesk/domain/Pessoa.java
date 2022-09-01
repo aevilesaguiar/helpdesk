@@ -1,6 +1,7 @@
 package com.aeviles.helpdesk.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,6 +20,7 @@ public abstract class Pessoa implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)//responsabilidade do banco de dados de criar
     protected Integer id;
     protected String nome;
+    @CPF
     @Column(unique = true)//estou informando ao BD que esse valor é unico
     protected String cpf;
     @Column(unique = true)//estou informando ao BD que esse valor é unico

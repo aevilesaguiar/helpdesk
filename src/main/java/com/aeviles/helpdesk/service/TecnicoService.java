@@ -39,6 +39,16 @@ public class TecnicoService {
         return tecnicoRepository.save(newTecnicoObj);
     }
 
+    public Tecnico update(Integer id, TecnicoDTO tecnicoDTO) {
+        //eu seto o id que veio do TecnicoDTO com o Id que veio no parâmetro, pq ele pode passar na url um id e no corpo da requisição que veio nesse objeto passar outro id.
+        tecnicoDTO.setId(id);
+        // se esse id não existe ele lança um objeto não encontrado
+        Tecnico oldObjetoTecnico = findById(id);
+        validaPorCpfEEmail(tecnicoDTO);//verifica se existe e-mail ou cpf
+        oldObjetoTecnico=new Tecnico(tecnicoDTO);
+        return tecnicoRepository.save(oldObjetoTecnico);
+
+    }
     private void validaPorCpfEEmail(TecnicoDTO tecnicoDTO) {
         Optional< Pessoa> optionalTecnico=pessoaRepository.findByCpf(tecnicoDTO.getCpf());
         //verifica se o cpf já existe
@@ -52,4 +62,6 @@ public class TecnicoService {
         }
 
     }
+
+
 }
