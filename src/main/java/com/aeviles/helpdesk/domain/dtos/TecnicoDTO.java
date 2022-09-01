@@ -8,6 +8,7 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.FetchType;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -19,9 +20,13 @@ public class TecnicoDTO implements Serializable {
     private static final long serialVersionUID = -1813588164058069631L;
 
     protected Integer id;
+    @NotNull(message = " O campo nome é requerido")
     protected String nome;
+    @NotNull(message = " O campo cpf é requerido")
     protected String cpf;
+    @NotNull(message = " O campo email é requerido")
     protected String email;
+    @NotNull(message = " O campo senha é requerido")
     protected String senha;
     protected Set<Integer> perfis= new HashSet<>();//evita a exceção de nullPointerException, o set não permite que existe dois perfis igual pois é um conjunto, eu quero armazenar apenas o código do perfil
     @JsonFormat(pattern = "dd/MM/yyyy")//formato/padrão pois apenas com LocalDate vem sem a forma padrao que eu quero
