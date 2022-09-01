@@ -21,6 +21,7 @@ public class ChamadoService {
     private ClienteService clienteService;
 
 
+    //endpoints
 
     public Chamado findById(Integer id){
         Optional<Chamado> objChamado= chamadoRepository.findById(id);
@@ -60,4 +61,6 @@ public class ChamadoService {
 
 
     }
+
+
 }
