@@ -4,6 +4,7 @@ import com.aeviles.helpdesk.domain.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -17,16 +18,21 @@ public class ChamadoDTO implements Serializable {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataFechamento;
     //aqui eu também não preciso de todas as informações de prioridade , apenas do id
+    @NotNull(message = "O campo PRIORIDADE é requerido!")
     private Integer prioridade;
     //aqui eu também não preciso de todas as informações de status , apenas do id
+    @NotNull(message = "O campo STATUS é requerido!")
     private Integer status;
+    @NotNull(message = "O campo TITULO é requerido!")
     private String titulo;
+    @NotNull(message = "O campo OBSERVAÇÕES é requerido!")
     private String observacoes;
-    private String Observacoes;
     //aqui eu não quero retornar todas as informações do meu técnico
     //quando eu buscar um chamado pelo o seu id, eu preciso apenas do id
+    @NotNull(message = "O campo TECNICO é requerido!")
     private Integer tecnico;
     //mesmo caso do cliente eu só preciso do id e não de todas as informações do cliente
+    @NotNull(message = "O campo CLIENTE é requerido!")
     private Integer cliente;
     private String nomeTecnico;
     private String nomeCliente;
