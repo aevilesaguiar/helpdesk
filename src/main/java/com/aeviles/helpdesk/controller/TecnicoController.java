@@ -53,4 +53,11 @@ public class TecnicoController {
         return ResponseEntity.ok().body(new TecnicoDTO(objTecnico));
     }
 
+    //método delete é no conten ele não retorna nada, posso colocar void ou tecnicoDTO
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<TecnicoDTO>  delete(@PathVariable Integer id){
+        tecnicoService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
