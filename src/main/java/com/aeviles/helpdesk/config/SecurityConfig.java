@@ -1,0 +1,72 @@
+package com.aeviles.helpdesk.config;
+
+import org.hibernate.cfg.Environment;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+
+//Classe de Configuração
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    //se fosse com o banco de dados h2 incluíriamos ocódigo abaixo
+    //private static final String[] PUBLIC_MATCHERS = { "/h2-console/**" }; tudo que vier após o h2console eu quero que seja liberado
+
+    //esse enviaronment representa o ambiente o qual o nosso aplicativo atual está sendo executado, ele pode ser usado para obter os perfis e ambientes do aplicativo
+    //@Autowired
+    //	private Environment env;
+
+
+    //esse método sobrescrito configure: qualquer endpoint que requerer uma defesa contra qualquer vulnerabilidade
+    //pode ser especificado aqui dentro, inclusive os endpoints publicos e algumas configurações de filtro.
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+
+        //fazer uma validação para ele ativar o h2
+        //if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
+         //   http.headers().frameOptions().disable();
+        //}
+
+    //temos uma configuração de cors e ele sobe o métodocorsConfigurationSource()
+      http.cors().and().csrf().disable(); //desabilitar a proteção contra o ataque csrf ,Cross-site Request Forgery (CSRF) é um tipo de
+                                            // ataque de websites maliciosos. Um ataque CSRF às vezes é chamado de ataque de um clique
+                                            //ou transporte de sessão. Esse tipo de ataque envia solicitações desautorizadas de um usuário no qual o website confia.
+                                            // a aplicação não vai armazenar a sessão de usuario nós vamos desabilitar
+    //eu asseguro que a sessão de usuário não será criada
+      http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+      //configuração para liberar o h2
+       //http.authorizeRequests().antMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated();
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource(){
+        //configuração do cors, ele aplica uma liberação de valores padrão
+        CorsConfiguration configuration= new CorsConfiguration().applyPermitDefaultValues();
+        //métodos permitidos
+        configuration.setAllowedMethods(Arrays.asList("POST","GET","PUT","DELETE","OPTIONS"));
+
+        final UrlBasedCorsConfigurationSource source= new UrlBasedCorsConfigurationSource();
+        //registrando a configuração de cors
+        source.registerCorsConfiguration("/**",configuration);
+        return source;
+    }
+
+    //adicionar um Bean de BCryptPasswordEncoder, qualquer pessoa que tiver acesso ao BD vai ver a senha , por isso temos que encodar a senha
+    //Agora temos um BCryptPasswordEncoder em forma de @Bean que posso injetar em qualquer parte do meu programa
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder(){
+        return  new BCryptPasswordEncoder();
+    }
+
+
+}

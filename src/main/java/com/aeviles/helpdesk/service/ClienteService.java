@@ -9,6 +9,7 @@ import com.aeviles.helpdesk.repository.PessoaRepository;
 import com.aeviles.helpdesk.service.exceptions.DataIntegrityViolationException;
 import com.aeviles.helpdesk.service.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,9 @@ public class ClienteService {
     @Autowired
     private PessoaRepository pessoaRepository;
 
+    @Autowired
+    private BCryptPasswordEncoder encoder; //Agora utilizaremos para encodar a senha, não teremos mais acesso a senha do usuario, ele cria um hash que não conseguimos quebrar
+
     public Cliente findById(Integer id){
         Optional<Cliente> cliente= clienteRepository.findById(id);
         return cliente.orElseThrow(()-> new ObjectNotFoundException("Objeto não encontrado! Id+ "+id));
@@ -35,6 +39,7 @@ public class ClienteService {
 
     public Cliente create(ClienteDTO clienteDTO) {
         clienteDTO.setId(null);//para aassegurar que o id vai vir nulo
+        clienteDTO.setSenha(encoder.encode(clienteDTO.getSenha()));//ele pega a senha que está 123 e já vai encodar, qdo salvar no BD ele estará encodada
         validaPorCpfEEmail(clienteDTO);
         Cliente newClienteObj=new Cliente(clienteDTO);
         return clienteRepository.save(newClienteObj);
