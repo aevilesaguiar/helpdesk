@@ -66,25 +66,24 @@ private ClienteRepository clienteRepository;
 @Autowired
 private ChamadoRepository chamadoRepository;
 public static void main(String[] args) {
-	SpringApplication.run(HelpdeskApplication.class, args);
+SpringApplication.run(HelpdeskApplication.class, args);
 }
 
 @Override
 public void run(String... args) throws Exception {
 
-	Tecnico tec1= new Tecnico(null,"Aeviles Aguiar","111.123.222-89","aasemail@email.com","123");
-	tec1.addPerfil(Perfil.ADMIN);
+Tecnico tec1= new Tecnico(null,"Aeviles Aguiar","111.123.222-89","aasemail@email.com","123");
+tec1.addPerfil(Perfil.ADMIN);
 
 
-	Cliente cli1= new Cliente(null,"Mark Zukemberg","123.456.789-00","mark@email.com","123");
-	cli1.addPerfil(Perfil.CLIENTE);
+Cliente cli1= new Cliente(null,"Mark Zukemberg","123.456.789-00","mark@email.com","123");
+cli1.addPerfil(Perfil.CLIENTE);
 
-	Chamado c1= new Chamado(null, Prioridade.MEDIA,Status.ANDAMENTO, "Chamado 01", "Primeiro Chamado",tec1,cli1);
+Chamado c1= new Chamado(null, Prioridade.MEDIA,Status.ANDAMENTO, "Chamado 01", "Primeiro Chamado",tec1,cli1);
 
-	tecnicoRepository.saveAll(Arrays.asList(tec1));
-	clienteRepository.saveAll(Arrays.asList(cli1));
-	chamadoRepository.saveAll(Arrays.asList(c1));
-
+tecnicoRepository.saveAll(Arrays.asList(tec1));
+clienteRepository.saveAll(Arrays.asList(cli1));
+chamadoRepository.saveAll(Arrays.asList(c1));
 }
 }
 
@@ -148,10 +147,10 @@ public class MyController {
 @GetMapping(path = "/test")
 @ResponseStatus(HttpStatus.OK)
 public User test() {
-    User user = new User();
-    user.setName("Name 1");
+User user = new User();
+user.setName("Name 1");
 
-    return user;
+return user;
 }
 }
 é o mesmo que:
@@ -161,12 +160,12 @@ public class MyController {
 
 @GetMapping(path = "/test")
 public ResponseEntity<User> test() {
-    User user = new User();
-    user.setName("Name 1");
+User user = new User();
+user.setName("Name 1");
 
-    HttpHeaders responseHeaders = new HttpHeaders();
-    // ...
-    return new ResponseEntity<>(user, responseHeaders, HttpStatus.OK);
+HttpHeaders responseHeaders = new HttpHeaders();
+// ...
+return new ResponseEntity<>(user, responseHeaders, HttpStatus.OK);
 }
 }
 Dessa forma, você pode definir ResponseEntityapenas quando necessário.
@@ -176,6 +175,7 @@ Atualizar
 Você pode usar isso:
 
 return ResponseEntity.ok().headers(responseHeaders).body(user);
+
 ## entendendo
 
 Como já dito, JPA é somente a tecnologia de acesso ao banco de dados. Com ele você pode usar os Design Patterns
@@ -244,14 +244,11 @@ A execução deste trecho de código resulta em:
 
 [sentence, a, This, short, forms]
 
-
 ## Autenticação com JWT(JSON Web Token)
 
 **JWT** ou **JSON Web Token** é um padrão da indústria definido pela RFC7519 que tem como objetivo transmitir ou armazenar de forma compacta e segura objetos JSON entre diferentes aplicações. O **JWT** é digitalmente assinado usando uma chave secreta com o algoritmo HMAC ou um par de chaves pública e privada RSA ou ECDSA.
 
-
 JWT, sigla para JSON Web Token, é uma técnica definida na RFC 7519 para autenticação remota entre duas partes. Ele é uma das formas mais utilizadas para autenticar usuários em APIs RESTful.
-
 
 No exemplo da **Figura 1** vemos um cliente que enviará uma requisição HTTP ao endpoint de autenticação de uma API. Nela o cliente envia, no corpo da requisição dados como endereço de e-mail e senha.
 
@@ -259,18 +256,13 @@ No exemplo da **Figura 1** vemos um cliente que enviará uma requisição HTTP a
 
 **Figura 1** . Cliente enviando requisição com dados de autenticação
 
-
 Uma vez que os dados enviados pelo cliente tenham sido autenticados no servidor, este **criará um token JWT** assinado com um segredo interno da API e enviará este token de volta ao cliente, como mostra a  **Figura 2** .
 
 ![image.png](assets/image.png?t=1662135862761)
 
-
 Provido com o token autenticado, o cliente possui acesso aos endpoints da aplicação que antes lhes eram restritos. Para realizar esse acesso, conforme mostra a **Figura 3** é preciso informar esse token no header Authorization da requisição e, por convenção, após a palavra **Bearer**.
 
-
 ![image.png](assets/image.png?t=1662135903712)
-
-
 
 ### Como é por dentro?
 
@@ -286,7 +278,6 @@ Um JSON Web Token é composto por três componentes básicos: HEADER, PAYLOAD e 
     "typ": "JWT"
 }
 ```
-
 #### Payload
 
 É o componente onde se encontram os dados referentes à própria autenticação.
@@ -297,11 +288,9 @@ Um JSON Web Token é composto por três componentes básicos: HEADER, PAYLOAD e 
     "password": "ya0gsqhy4wzvuvb4"
 }
 ```
-
 #### Signature
 
 É a assinatura única de cada token que é gerada a partir de um algoritmo de criptografia e tem seu corpo com base no header, no payload e no segredo definido pela aplicação. No próximo tópico entraremos em mais detalhes.
-
 
 # Autenticação x Autorização
 
@@ -347,15 +336,11 @@ Após realizar a autenticação no sistema, o usuário do financeiro terá acess
 ```
 Se eu incluir apenas essas dependencias no meu pom, quando faço uma requisição para listar ele retorna 401 não autorizado. Ou seja ele bloqueia todos os meus endpoints.
 
-
 ## Cross-origin resource sharing(Compartilhamento de recursos entre origens)
-
 
 Depois que incluimos as dependencias nossos endpoints estão todos bloqueados, não recebemos mais requisições, então temos que liberar o acesso, liberar as requisições para o back end, e isso tem que ser feito de forma explicita no spring.
 
-
 O compartilhamento de recursos entre origens é um mecanismo que permite que recursos restritos em uma página da Web sejam solicitados de outro domínio fora do domínio do qual o primeiro recurso foi servido. Uma página da web pode incorporar livremente imagens de origem cruzada, folhas de estilo, scripts, iframes e vídeo
-
 
 ```
 Por padrão, o CorsConfiguration não permite solicitações de origem cruzada e deve ser configurado explicitamente. Use esse método para alternar para os padrões que permitem todas as solicitações de origem cruzada para GET, HEAD e POST, mas sem substituir nenhum valor que já tenha sido definido.
@@ -364,7 +349,6 @@ Permitir todas as origens com o valor especial "*" definido na especificação C
 Permitir métodos "simples" GET, HEAD e POST.
 Permitir todos os cabeçalhos.
 ```
-
 Basicamente quando você coloca a anotação @Bean, você está dizendo pro Spring que quer criar esse objeto e deixar ele disponível para outras classes utilizarem ele como dependência, por exemplo.
 
 Se a anotação @Bean está no método, é importante que a classe em si tenha alguma anotação que indique pro Spring que a classe deve ser "processada". Pode colocar, por exemplo a anotação @Component na classe em si. Sem essa anotação o método não é invocado.
@@ -375,6 +359,12 @@ Para os parâmetros, ele vai buscar algum bean que satisfaça o parâmetro, e va
 
 A classe UserSecuritySS deve implementar interfaces UserDetais e implemenatr os contratos, e as mesmas podem ser implementadas de acordo com a regra de negócio do seu cliente
 
+
+
+## Alternativas ao Heroku
+
+- netlify
+- capRover
 
 
 ## Referencias
