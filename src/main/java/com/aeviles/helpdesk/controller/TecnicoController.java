@@ -40,7 +40,7 @@ public class TecnicoController {
         return ResponseEntity.ok().body(tecnicoDTOS);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")//SÓ QUEM CRIA É O PERFIL ADMIN
+   // @PreAuthorize("hasAnyRole('ADMIN')")//SÓ QUEM CRIA É O PERFIL ADMIN
     @PostMapping
     public ResponseEntity<TecnicoDTO> create(@Valid @RequestBody TecnicoDTO tecnicoDTO){
         Tecnico newObjTecnico=tecnicoService.create(tecnicoDTO);
@@ -49,7 +49,7 @@ public class TecnicoController {
     }
 
 
-    @PreAuthorize("hasAnyRole('ADMIN')")//SÓ QUEM ATUALIZA É O PERFIL ADMIN
+    //@PreAuthorize("hasAnyRole('ADMIN')")//SÓ QUEM ATUALIZA É O PERFIL ADMIN, quem tiver essa role admim pode acessar o perfil update
     @PutMapping(value = "/{id}")
     public ResponseEntity<TecnicoDTO> update(@PathVariable Integer id,@Valid @RequestBody TecnicoDTO tecnicoDTO){
         Tecnico objTecnico = tecnicoService.update(id, tecnicoDTO);
@@ -57,7 +57,7 @@ public class TecnicoController {
     }
 
     //método delete é no conten ele não retorna nada, posso colocar void ou tecnicoDTO
-    @PreAuthorize("hasAnyRole('ADMIN')")//SÓ QUEM DELETA É O PERFIL ADMIN
+   // @PreAuthorize("hasAnyRole('ADMIN')")//SÓ QUEM DELETA É O PERFIL ADMIN
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<TecnicoDTO>  delete(@PathVariable Integer id){
         tecnicoService.delete(id);

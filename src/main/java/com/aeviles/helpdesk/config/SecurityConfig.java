@@ -71,7 +71,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //como será utiliazda a autenticação do framework esse método tem uma sobrecarga e ele precisa ser reescrito
         @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-       auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+       auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder()).and();
+
     }
 
     @Bean
