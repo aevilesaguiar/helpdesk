@@ -75,7 +75,6 @@ public void run(String... args) throws Exception {
 Tecnico tec1= new Tecnico(null,"Aeviles Aguiar","111.123.222-89","aasemail@email.com","123");
 tec1.addPerfil(Perfil.ADMIN);
 
-
 Cliente cli1= new Cliente(null,"Mark Zukemberg","123.456.789-00","mark@email.com","123");
 cli1.addPerfil(Perfil.CLIENTE);
 
@@ -278,6 +277,7 @@ Um JSON Web Token é composto por três componentes básicos: HEADER, PAYLOAD e 
     "typ": "JWT"
 }
 ```
+
 #### Payload
 
 É o componente onde se encontram os dados referentes à própria autenticação.
@@ -288,6 +288,7 @@ Um JSON Web Token é composto por três componentes básicos: HEADER, PAYLOAD e 
     "password": "ya0gsqhy4wzvuvb4"
 }
 ```
+
 #### Signature
 
 É a assinatura única de cada token que é gerada a partir de um algoritmo de criptografia e tem seu corpo com base no header, no payload e no segredo definido pela aplicação. No próximo tópico entraremos em mais detalhes.
@@ -334,6 +335,7 @@ Após realizar a autenticação no sistema, o usuário do financeiro terá acess
 		</dependency>
 	</dependencies>
 ```
+
 Se eu incluir apenas essas dependencias no meu pom, quando faço uma requisição para listar ele retorna 401 não autorizado. Ou seja ele bloqueia todos os meus endpoints.
 
 ## Cross-origin resource sharing(Compartilhamento de recursos entre origens)
@@ -349,6 +351,7 @@ Permitir todas as origens com o valor especial "*" definido na especificação C
 Permitir métodos "simples" GET, HEAD e POST.
 Permitir todos os cabeçalhos.
 ```
+
 Basicamente quando você coloca a anotação @Bean, você está dizendo pro Spring que quer criar esse objeto e deixar ele disponível para outras classes utilizarem ele como dependência, por exemplo.
 
 Se a anotação @Bean está no método, é importante que a classe em si tenha alguma anotação que indique pro Spring que a classe deve ser "processada". Pode colocar, por exemplo a anotação @Component na classe em si. Sem essa anotação o método não é invocado.
@@ -359,12 +362,72 @@ Para os parâmetros, ele vai buscar algum bean que satisfaça o parâmetro, e va
 
 A classe UserSecuritySS deve implementar interfaces UserDetais e implemenatr os contratos, e as mesmas podem ser implementadas de acordo com a regra de negócio do seu cliente
 
-
-
 ## Alternativas ao Heroku
+
+
 
 - netlify
 - capRover
+
+## Adicionando a biblioteca SpringFox em uma aplicação API Spring Boot
+
+Para este artigo, estou utilizando a aplicação mostrada no meu último artigo, onde ensinei a criar uma [aplicação REST API no Spring Boot](https://www.treinaweb.com.br/blog/criando-uma-api-rest-com-o-spring-boot/). Você também pode ver a aplicação que criei no meu [Github](https://github.com/wladimilson/springbootapi).
+
+Com a aplicação criada, temos que adicionar a dependência do SpringFox nela:
+
+Copiar
+
+```xml
+<dependency>
+	<groupId>io.springfox</groupId>
+	<artifactId>springfox-swagger2</artifactId>
+	<version>3.0.0
+</version>
+</dependency>
+```
+
+Para interagir com a configuração, também é necessário adicionar a dependência que fornece o Swagger UI:
+
+Copiar
+
+```xml
+<dependency>
+	<groupId>io.springfox</groupId>
+	<artifactId>springfox-swagger-ui</artifactId>
+	<version>2.9.2</version>
+</dependency>
+```
+
+Agora para que o arquivo de especificação da API seja criado, é necessário habilitar o Swagger na aplicação. Para isso, adicione nela uma classe chamada `SwaggerConfig`, com o conteúdo abaixo:
+
+Copiar
+
+```java
+@Configuration
+@EnableSwagger2
+public class SwaggerConfig {
+    @Bean
+    public Docket api() {
+        return new Docket(DocumentationType.SWAGGER_2)
+          .select()
+          .apis(RequestHandlerSelectors.any())
+          .paths(PathSelectors.any())
+          .build();
+    }
+}
+```
+
+No Spring Boot o Swagger é ativado através da anotação `@EnableSwagger2`. O `Docket` que estamos definindo no nosso bean nos permite configurar aspectos dos endpoints expostos por ele.
+
+Nos métodos `apis()` e `paths()` definimos que todas as apis e caminhos estarão disponíveis. Com isso através de reflection a biblioteca já consegue obter os endpoints definidos na aplicação.
+
+Incluir: spring.mvc.pathmatch.matching-strategy=ant-path-matcher
+
+para evitar erro de nullPointer Exception
+
+
+http://localhost:8080/swagger-ui.html#/tecnico-controller/updateUsingPUT_2
+
 
 
 ## Referencias
