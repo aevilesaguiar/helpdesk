@@ -5,6 +5,7 @@ import com.aeviles.helpdesk.domain.dtos.TecnicoDTO;
 import com.aeviles.helpdesk.service.TecnicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -39,6 +40,7 @@ public class TecnicoController {
         return ResponseEntity.ok().body(tecnicoDTOS);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")//SÓ QUEM CRIA É O PERFIL ADMIN
     @PostMapping
     public ResponseEntity<TecnicoDTO> create(@Valid @RequestBody TecnicoDTO tecnicoDTO){
         Tecnico newObjTecnico=tecnicoService.create(tecnicoDTO);
@@ -47,6 +49,7 @@ public class TecnicoController {
     }
 
 
+    @PreAuthorize("hasAnyRole('ADMIN')")//SÓ QUEM ATUALIZA É O PERFIL ADMIN
     @PutMapping(value = "/{id}")
     public ResponseEntity<TecnicoDTO> update(@PathVariable Integer id,@Valid @RequestBody TecnicoDTO tecnicoDTO){
         Tecnico objTecnico = tecnicoService.update(id, tecnicoDTO);
@@ -54,6 +57,7 @@ public class TecnicoController {
     }
 
     //método delete é no conten ele não retorna nada, posso colocar void ou tecnicoDTO
+    @PreAuthorize("hasAnyRole('ADMIN')")//SÓ QUEM DELETA É O PERFIL ADMIN
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<TecnicoDTO>  delete(@PathVariable Integer id){
         tecnicoService.delete(id);

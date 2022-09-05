@@ -1,11 +1,14 @@
 package com.aeviles.helpdesk.config;
 
+import com.aeviles.helpdesk.security.JWTAAuthorizationFilter;
 import com.aeviles.helpdesk.security.JWTAutenticationFilter;
 import com.aeviles.helpdesk.security.JWTUtil;
 import com.aeviles.helpdesk.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -19,6 +22,7 @@ import java.util.Arrays;
 
 //Classe de Configuração
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)//podemos usar o prepostEnable nos nossos endpoints
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -54,6 +58,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                             // a aplicação não vai armazenar a sessão de usuario nós vamos desabilitar
     //registrar o filtro de autenticação em SecurityConfigure
     http.addFilter(new JWTAutenticationFilter(authenticationManager(),jwtUtil));
+
+    http.addFilter(new JWTAAuthorizationFilter(authenticationManager(),jwtUtil, userDetailsService));
 
     //eu asseguro que a sessão de usuário não será criada
       http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
