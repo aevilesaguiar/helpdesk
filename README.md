@@ -364,8 +364,6 @@ A classe UserSecuritySS deve implementar interfaces UserDetais e implemenatr os 
 
 ## Alternativas ao Heroku
 
-
-
 - netlify
 - capRover
 
@@ -425,10 +423,10 @@ Incluir: spring.mvc.pathmatch.matching-strategy=ant-path-matcher
 
 para evitar erro de nullPointer Exception
 
-
 http://localhost:8080/swagger-ui.html#/tecnico-controller/updateUsingPUT_2
 
 
+teste
 
 ## Referencias
 
